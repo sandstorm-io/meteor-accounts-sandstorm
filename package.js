@@ -20,19 +20,23 @@
 // THE SOFTWARE.
 
 Package.describe({
-  summary: "Login service for Sandstorm.io applications. " +
-           "Automatically logs in users based on their Sandstorm credentials."
+  summary: "Login service for Sandstorm.io applications",
+  version: "0.1.1",
+  name: "kenton:accounts-sandstorm",
+  git: "https://github.com/sandstorm-io/meteor-accounts-sandstorm.git"
 });
 
-Package.on_use(function(api) {
-  api.use('random', ['server']);
-  api.use('accounts-base', ['client', 'server']);
-  api.use('webapp', ['server']);
-  api.use('http', ['client']);
+Package.onUse(function(api) {
+  api.versionsFrom('0.9.1');
+
+  api.use('random', 'server');
+  api.use('accounts-base');
+  api.use('webapp', 'server');
+  api.use('http', 'client');
 
   // Export Accounts (etc) to packages using this one.
-  api.imply('accounts-base', ['client', 'server']);
+  api.imply('accounts-base');
 
-  api.add_files("client.js", "client");
-  api.add_files("server.js", "server");
+  api.addFiles("client.js", "client");
+  api.addFiles("server.js", "server");
 });

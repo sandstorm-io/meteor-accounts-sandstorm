@@ -1,9 +1,0 @@
-{
-  "name": "accounts-sandstorm",
-  "description": "Login service for Sandstorm.io applications. Automatically logs in users based on their Sandstorm credentials.",
-  "homepage": "https://github.com/sandstorm-io/meteor-accounts-sandstorm",
-  "author": "Kenton Varda <kenton@sandstorm.io> (https://sandstorm.io)",
-  "version": "0.1.0",
-  "git": "https://github.com/sandstorm-io/meteor-accounts-sandstorm.git"
-}
-
