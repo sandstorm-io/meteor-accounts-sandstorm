@@ -38,7 +38,7 @@ var handleCredentials = Meteor.bindEnvironment(function (req, res) {
 
     var credentials = {
       sandstormId: req.headers["x-sandstorm-user-id"] || null,
-      name: req.headers["x-sandstorm-username"],
+      name: decodeURI(req.headers["x-sandstorm-username"]),
       permissions: permissions
     };
 
