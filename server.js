@@ -57,7 +57,6 @@ var handleCredentials = Meteor.bindEnvironment(function (req, res) {
 
     res.writeHead(200, {
       "Content-Type": "application/json",
-      "Content-Length": text.length
     });
     res.end(text);
   } catch (err) {
