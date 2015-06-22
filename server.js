@@ -53,13 +53,13 @@ var handleCredentials = Meteor.bindEnvironment(function (req, res) {
       Accounts._insertLoginToken(login.userId, token);
     }
 
-    var text = JSON.stringify(credentials);
+    var body = new Buffer(JSON.stringify(credentials));
 
     res.writeHead(200, {
       "Content-Type": "application/json",
-      "Content-Length": text.length
+      "Content-Length": body.length
     });
-    res.end(text);
+    res.end(body);
   } catch (err) {
     res.writeHead(500, {
       "Content-Type": "text/plain"
