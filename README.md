@@ -22,3 +22,28 @@ package repository:
 To package a Meteor app for Sandstorm,
 [use the `meteor-spk` tool](https://github.com/sandstorm-io/meteor-spk).
 
+## User profile info
+
+This package automatically populates `profile.name` based on the user's
+display name provided by Sandstorm. Sandstorm also provides [a bunch of
+other information](https://docs.sandstorm.io/en/latest/developing/auth/#headers-that-an-app-receives)
+about users that you may be interested in; `accounts-sandstorm` will
+place that information inside `services.sandstorm` in the user doc.
+
+The specific fields are:
+
+* `id`: From `X-Sandstorm-User-Id`; globally unique and stable
+  identifier for this user.
+* `picture`: From `X-Sandstorm-User-Picture`, URL of the user's preferred
+  avatar, or null if they don't have one.
+* `permissions`: From `X-Sandstorm-Permissions` (but parsed to a list),
+  the list of permissions the user has as determined by the Sandstorm
+  sharing model. Apps can define their own permissions.
+* `preferredHandle`: From `X-Sandstorm-Preferred-Handle`, the user's
+  preferred handle ("username", in the unix sense). This is NOT
+  guaranteed to be unique; it's just a different form of display name.
+* `pronouns`: From `X-Sandstorm-User-Pronouns`, indicates the pronouns
+  by which the user prefers to be referred.
+
+The package does not automatically publish any of these; it is up to your
+app to do so.
