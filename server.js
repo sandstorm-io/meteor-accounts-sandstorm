@@ -39,13 +39,21 @@ var handleCredentials = Meteor.bindEnvironment(function (req, res) {
     var credentials = {
       sandstormId: req.headers["x-sandstorm-user-id"] || null,
       name: decodeURI(req.headers["x-sandstorm-username"]),
-      permissions: permissions
+      permissions: permissions,
+      picture: req.headers["x-sandstorm-user-picture"] || null,
+      preferredHandle: req.headers["x-sandstorm-preferred-handle"] || null,
+      pronouns: req.headers["x-sandstorm-user-pronouns"] || null
     };
 
     if (credentials.sandstormId) {
       var login = Accounts.updateOrCreateUserFromExternalService(
-          "sandstorm", { id: credentials.sandstormId, permissions: permissions },
-          { profile: { name: credentials.name } });
+          "sandstorm", {
+            id: credentials.sandstormId,
+            permissions: permissions,
+            picture: credentials.picture,
+            preferredHandle: credentials.preferredHandle,
+            pronouns: credentials.pronouns
+          }, { profile: { name: credentials.name } });
       console.log(login);
       credentials.meteorId = login.userId;
       var token = Accounts._generateStampedLoginToken();

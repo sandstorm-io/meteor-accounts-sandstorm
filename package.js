@@ -21,13 +21,13 @@
 
 Package.describe({
   summary: "Login service for Sandstorm.io applications",
-  version: "0.1.4",
+  version: "0.1.5",
   name: "kenton:accounts-sandstorm",
   git: "https://github.com/sandstorm-io/meteor-accounts-sandstorm.git"
 });
 
 Package.onUse(function(api) {
-  api.versionsFrom('1.0.2');
+  api.versionsFrom('1.2');
 
   api.use('random', 'server');
   api.use('accounts-base');
