@@ -47,3 +47,9 @@ The specific fields are:
 
 The package does not automatically publish any of these; it is up to your
 app to do so.
+
+## Development aids
+
+`accounts-sandstorm` normally only does anything when running inside Sandstorm. However, it's often a lot more convenient to develop Meteor apps using Meteor's normal dev tools which currently cannot run inside Sandstorm. This makes it hard to test your Sandstorm integration.
+
+To solve this, try using the package [`jacksingleton:accounts-sandstorm-dev`](https://atmospherejs.com/jacksingleton/accounts-sandstorm-dev), which lets you fake Sandstorm parameters even when running in regular dev mode outside Sandstorm!
