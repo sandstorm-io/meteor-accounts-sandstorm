@@ -22,13 +22,20 @@
 Meteor.startup(function () {
   Deps.autorun(function () {
     if (!Meteor.userId()) {
+      // Accounts._setLoggingIn is a semi-private function, but it's also used in accounts-password.
+      Accounts._setLoggingIn(true);
       HTTP.get("/.sandstorm-credentials", function (error, result) {
         if (error) {
+          Accounts._setLoggingIn(false);
           console.error(error.stack);
         } else if (!result.data) {
+          Accounts._setLoggingIn(false);
           console.error("/.sandstorm-credentials is not JSON?");
         } else if (result.data.token) {
+          // Don't call Accounts._setLoggingIn here and let the normal login flow take over.
           Meteor.loginWithToken(result.data.token, function() {});
+        } else {
+          Accounts._setLoggingIn(false);
         }
       });
     }
