@@ -33,6 +33,7 @@ Package.onUse(function(api) {
   api.use('accounts-base');
   api.use('webapp', 'server');
   api.use('http', 'client');
+  api.use('tracker', 'client');
 
   // Export Accounts (etc) to packages using this one.
   api.imply('accounts-base');
