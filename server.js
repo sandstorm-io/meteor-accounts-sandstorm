@@ -49,6 +49,7 @@ var handleCredentials = Meteor.bindEnvironment(function (req, res) {
       var login = Accounts.updateOrCreateUserFromExternalService(
           "sandstorm", {
             id: credentials.sandstormId,
+            name: credentials.name,
             permissions: permissions,
             picture: credentials.picture,
             preferredHandle: credentials.preferredHandle,
