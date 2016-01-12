@@ -19,6 +19,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+Meteor.startup(function() {
+  Meteor.settings.public.isInSandstorm = true;
+});
+
 WebApp.rawConnectHandlers.use(function (req, res, next) {
   if (req.url === "/.sandstorm-credentials") {
     handleCredentials(req, res);
