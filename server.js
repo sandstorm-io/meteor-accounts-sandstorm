@@ -20,7 +20,11 @@
 // THE SOFTWARE.
 
 Meteor.startup(function() {
-  Meteor.settings.public.isInSandstorm = true;
+  if (process.env.SANDSTORM === '1'){
+    Meteor.settings.public.isInSandstorm = true;
+  } else {
+    Meteor.settings.public.isInSandstorm = false;
+  }
 });
 
 WebApp.rawConnectHandlers.use(function (req, res, next) {
