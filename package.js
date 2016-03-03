@@ -21,7 +21,7 @@
 
 Package.describe({
   summary: "Login service for Sandstorm.io applications",
-  version: "0.1.8",
+  version: "0.2.0",
   name: "kenton:accounts-sandstorm",
   git: "https://github.com/sandstorm-io/meteor-accounts-sandstorm.git"
 });
@@ -29,15 +29,16 @@ Package.describe({
 Package.onUse(function(api) {
   api.versionsFrom('1.2');
 
-  api.use('random', 'server');
-  api.use('accounts-base');
+  api.use('random', ['client', 'server']);
+  api.use('accounts-base', ['client', 'server'], {weak: true});
   api.use('webapp', 'server');
   api.use('http', 'client');
   api.use('tracker', 'client');
-
-  // Export Accounts (etc) to packages using this one.
-  api.imply('accounts-base');
+  api.use('reactive-var', 'client');
+  api.use('check', 'server');
 
   api.addFiles("client.js", "client");
   api.addFiles("server.js", "server");
+
+  api.export("SandstormAccounts", "client");
 });
