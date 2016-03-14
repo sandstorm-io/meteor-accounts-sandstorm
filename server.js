@@ -77,7 +77,7 @@ Meteor.methods({
 });
 
 WebApp.rawConnectHandlers.use(function (req, res, next) {
-  if (req.url === "/.sandstorm-login") {
+  if (req.url === (__meteor_runtime_config__.ROOT_URL_PATH_PREFIX || '')+"/.sandstorm-login") {
     handlePostToken(req, res);
     return;
   }
