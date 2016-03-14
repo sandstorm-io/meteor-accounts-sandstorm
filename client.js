@@ -113,7 +113,7 @@ function loginWithSandstorm(connection) {
 
     // Send the token in an HTTP POST request which on the server side will allow us to receive the
     // Sandstorm headers.
-    HTTP.post("/.sandstorm-login",
+    HTTP.post((__meteor_runtime_config__.ROOT_URL_PATH_PREFIX || '')+"/.sandstorm-login",
         {content: token, headers: headers},
         function (error, result) {
       if (error) {
