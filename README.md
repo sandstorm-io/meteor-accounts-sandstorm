@@ -22,6 +22,23 @@ package repository:
 To package a Meteor app for Sandstorm,
 [use the `meteor-spk` tool](https://github.com/sandstorm-io/meteor-spk).
 
+To enable it, Meteor settings should have the following key:
+
+```json
+{
+  "public": {
+    "sandstorm": true
+  }
+}
+```
+
+You can set it by adding the following value to `environ` of your command
+in your `sandstorm-pkgdef.capnp`:
+
+```
+(key = "METEOR_SETTINGS", value = "{\"public\": {\"sandstorm\": true}}"),
+```
+
 ## Usage
 
 * On the client, call `Meteor.sandstormUser()`. (This is a reactive data source.)
