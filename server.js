@@ -19,7 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-if (Meteor.settings.public.sandstorm) {
+if (Meteor.settings && Meteor.settings.public && Meteor.settings.public.sandstorm) {
   var Future = Npm.require("fibers/future");
 
   var inMeteor = Meteor.bindEnvironment(function (callback) {

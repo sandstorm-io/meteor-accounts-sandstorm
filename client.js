@@ -152,7 +152,7 @@ function loginWithSandstorm(connection) {
   if (stopImmediately) handle.stop();
 }
 
-if (Meteor.settings.public.sandstorm) {
+if (Meteor.settings && Meteor.settings.public && Meteor.settings.public.sandstorm) {
   // Auto-login the main Meteor connection.
   loginWithSandstorm(Meteor.connection);
 
