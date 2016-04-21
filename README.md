@@ -22,21 +22,17 @@ package repository:
 To package a Meteor app for Sandstorm,
 [use the `meteor-spk` tool](https://github.com/sandstorm-io/meteor-spk).
 
-To enable it, Meteor settings should have the following key:
+To enable it, you have to run Meteor with `SANDSTORM` environment variable set:
 
-```json
-{
-  "public": {
-    "sandstorm": true
-  }
-}
+```
+SANDSTORM=1 meteor
 ```
 
 You can set it by adding the following value to `environ` of your command
 in your `sandstorm-pkgdef.capnp`:
 
 ```
-(key = "METEOR_SETTINGS", value = "{\"public\": {\"sandstorm\": true}}"),
+(key = "SANDSTORM", value = "1"),
 ```
 
 ## Usage
