@@ -22,6 +22,19 @@ package repository:
 To package a Meteor app for Sandstorm,
 [use the `meteor-spk` tool](https://github.com/sandstorm-io/meteor-spk).
 
+To enable it, you have to run Meteor with `SANDSTORM` environment variable set:
+
+```
+SANDSTORM=1 meteor
+```
+
+You can set it by adding the following value to `environ` of your command
+in your `sandstorm-pkgdef.capnp`:
+
+```
+(key = "SANDSTORM", value = "1"),
+```
+
 ## Usage
 
 * On the client, call `Meteor.sandstormUser()`. (This is a reactive data source.)
