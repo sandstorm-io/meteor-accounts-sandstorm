@@ -59,11 +59,13 @@ if (__meteor_runtime_config__.SANDSTORM) {
         future.throw(new Meteor.Error("timeout", "Gave up waiting for login rendezvous XHR."));
       }, 10000);
 
-      var info = future.wait();
-
-      clearTimeout(timeout);
-
-      delete logins[token];
+      var info;
+      try {
+        info = future.wait();
+      } finally {
+        clearTimeout(timeout);
+        delete logins[token];
+      }
 
       // Set connection info. The call to setUserId() resets all publishes. We update the
       // connection's sandstorm info first so that when the publishes are re-run they'll see the
