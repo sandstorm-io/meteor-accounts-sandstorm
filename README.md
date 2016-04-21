@@ -14,13 +14,15 @@ automatically when they open the app. The user's `profile.name` will be
 populated from Sandstorm. When using this package, you should not use
 `accounts-ui` at all; just let login happen automatically.
 
+## Including in your app
+
 To use this package in your Meteor project, simply install it from the Meteor
 package repository:
 
     meteor add kenton:accounts-sandstorm
 
-To package a Meteor app for Sandstorm,
-[use the `meteor-spk` tool](https://github.com/sandstorm-io/meteor-spk).
+To package a Meteor app for Sandstorm, see
+[the Meteor app packaging guide](https://docs.sandstorm.io/en/latest/vagrant-spk/packaging-tutorial-meteor/).
 
 Note that this package does nothing if the `SANDSTORM` environment variable is
 not set. Therefore, it is safe to include the package even in non-Sandstorm
