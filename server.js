@@ -24,6 +24,25 @@ if (process.env.SANDSTORM) {
 }
 
 if (__meteor_runtime_config__.SANDSTORM) {
+  if (Package["accounts-base"]) {
+    // Highlander Mode: Disable all non-Sandstorm login mechanisms.
+    Package["accounts-base"].Accounts.validateLoginAttempt(function (attempt) {
+      if (!attempt.allowed) {
+        return false;
+      }
+      if (attempt.type !== "sandstorm") {
+        throw new Meteor.Error(403, "Non-Sandstorm login mechanisms disabled on Sandstorm.");
+      }
+      return true;
+    });
+    Package["accounts-base"].Accounts.validateNewUser(function (user) {
+      if (!user.services.sandstorm) {
+        throw new Meteor.Error(403, "Non-Sandstorm login mechanisms disabled on Sandstorm.");
+      }
+      return true;
+    });
+  }
+
   var Future = Npm.require("fibers/future");
 
   var inMeteor = Meteor.bindEnvironment(function (callback) {
