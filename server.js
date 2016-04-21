@@ -36,7 +36,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
       return true;
     });
     Package["accounts-base"].Accounts.validateNewUser(function (user) {
-      if (!user.services.sandstorm) {
+      if (!(user.services && user.services.sandstorm)) {
         throw new Meteor.Error(403, "Non-Sandstorm login mechanisms disabled on Sandstorm.");
       }
       return true;
@@ -54,6 +54,19 @@ if (__meteor_runtime_config__.SANDSTORM) {
 
   if (Package["accounts-base"]) {
     Meteor.users._ensureIndex("services.sandstorm.id", {unique: 1, sparse: 1});
+
+    // Sandstorm does not use login tokens so we override login method to not use them.
+    // Because when this package is enabled no other login method is allowed
+    // (see validateLoginAttempt callback above) this should not break anything.
+    Package["accounts-base"].Accounts._loginUser = function (methodInvocation, userId, stampedLoginToken) {
+      // We misused stampedLoginToken argument to pass the "sandstorm" object to this method.
+      methodInvocation.connection._sandstormUser = stampedLoginToken;
+      methodInvocation.setUserId(userId);
+
+      // We do not return anything because we do not have anything to add to the
+      // Sandstorm user info object which is being returned through options.
+      return {};
+    };
   }
 
   Meteor.onConnection(function (connection) {
@@ -86,19 +99,31 @@ if (__meteor_runtime_config__.SANDSTORM) {
         delete logins[token];
       }
 
-      // Set connection info. The call to setUserId() resets all publishes. We update the
-      // connection's sandstorm info first so that when the publishes are re-run they'll see the
-      // new info. In theory we really want to update it exactly when this.userId is updated, but
-      // we'd have to dig into Meteor internals to pull that off. Probably updating it a little
-      // early is fine?
-      //
-      // Note that calling setUserId() with the same ID a second time still goes through the motions
-      // of restarting all subscriptions, which is important if the permissions changed. Hopefully
-      // Meteor won't decide to "optimize" this by returning early if the user ID hasn't changed.
-      this.connection._sandstormUser = info.sandstorm;
-      this.setUserId(info.userId);
+      if (Package["accounts-base"]) {
+        return Package["accounts-base"].Accounts._attemptLogin(this, "loginWithSandstorm", arguments, {
+          userId: info.userId,
+          type: "sandstorm",
+          // Misusing stampedLoginToken to pass "sandstorm" object to _loginUser method.
+          stampedLoginToken: info.sandstorm,
+          // Options are returned if login is successful.
+          options: info
+        });
+      }
+      else {
+        // Set connection info. The call to setUserId() resets all publishes. We update the
+        // connection's sandstorm info first so that when the publishes are re-run they'll see the
+        // new info. In theory we really want to update it exactly when this.userId is updated, but
+        // we'd have to dig into Meteor internals to pull that off. Probably updating it a little
+        // early is fine?
+        //
+        // Note that calling setUserId() with the same ID a second time still goes through the motions
+        // of restarting all subscriptions, which is important if the permissions changed. Hopefully
+        // Meteor won't decide to "optimize" this by returning early if the user ID hasn't changed.
+        this.connection._sandstormUser = info.sandstorm;
+        this.setUserId(info.userId);
 
-      return info;
+        return info;
+      }
     }
   });
 
