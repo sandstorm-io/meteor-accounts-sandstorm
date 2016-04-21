@@ -125,7 +125,7 @@ function loginWithSandstorm(connection) {
         }
       }
     });
-  }
+  };
 
   // Wait until the connection is up before we start trying to send XHRs.
   var stopImmediately = false;  // Unfortunately, Tracker.autorun() runs the first time inline.
@@ -152,24 +152,26 @@ function loginWithSandstorm(connection) {
   if (stopImmediately) handle.stop();
 }
 
-// Auto-login the main Meteor connection.
-loginWithSandstorm(Meteor.connection);
+if (__meteor_runtime_config__.SANDSTORM) {
+  // Auto-login the main Meteor connection.
+  loginWithSandstorm(Meteor.connection);
 
-if (Package["accounts-base"]) {
-  // Make Meteor.loggingIn() work by calling a private method of accounts-base. If this breaks then
-  // maybe we should just overwrite Meteor.loggingIn() instead.
-  Tracker.autorun(function () {
-    Package["accounts-base"].Accounts._setLoggingIn(!Meteor.connection.sandstormUser());
-  });
-}
-
-Meteor.sandstormUser = function () {
-  return Meteor.connection.sandstormUser();
-}
-
-SandstormAccounts = {
-  setTestUserInfo: function (info) {
-    localStorage.sandstormTestUserInfo = JSON.stringify(info);
-    loginWithSandstorm(Meteor.connection);
+  if (Package["accounts-base"]) {
+    // Make Meteor.loggingIn() work by calling a private method of accounts-base. If this breaks then
+    // maybe we should just overwrite Meteor.loggingIn() instead.
+    Tracker.autorun(function () {
+      Package["accounts-base"].Accounts._setLoggingIn(!Meteor.connection.sandstormUser());
+    });
   }
-};
+
+  Meteor.sandstormUser = function () {
+    return Meteor.connection.sandstormUser();
+  };
+
+  SandstormAccounts = {
+    setTestUserInfo: function (info) {
+      localStorage.sandstormTestUserInfo = JSON.stringify(info);
+      loginWithSandstorm(Meteor.connection);
+    }
+  };
+}
