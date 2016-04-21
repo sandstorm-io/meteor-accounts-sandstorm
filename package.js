@@ -21,7 +21,7 @@
 
 Package.describe({
   summary: "Login service for Sandstorm.io applications",
-  version: "0.2.1",
+  version: "0.2.2",
   name: "kenton:accounts-sandstorm",
   git: "https://github.com/sandstorm-io/meteor-accounts-sandstorm.git"
 });
