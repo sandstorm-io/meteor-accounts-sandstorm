@@ -19,7 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-function loginWithSandstorm(connection) {
+function loginWithSandstorm(connection, apiHost, apiToken) {
   // Log in the connection using Sandstorm authentication.
   //
   // After calling this, connection.sandstormUser() will reactively return an object containing
@@ -60,7 +60,7 @@ function loginWithSandstorm(connection) {
     } else {
       connection.onReconnect = function () {
         reconnected = true;
-        loginWithSandstorm(connection);
+        loginWithSandstorm(connection, apiHost, apiToken);
       };
     }
   };
@@ -111,9 +111,16 @@ function loginWithSandstorm(connection) {
       }
     }
 
+    var postUrl = "/.sandstorm-login";
+    // Sandstorm mobile apps need to point at a different host and use an Authorization token.
+    if (apiHost) {
+      postUrl = apiHost + postUrl;
+      headers.Authorization = "Bearer " + apiToken;
+    }
+
     // Send the token in an HTTP POST request which on the server side will allow us to receive the
     // Sandstorm headers.
-    HTTP.post("/.sandstorm-login",
+    HTTP.post(postUrl,
         {content: token, headers: headers},
         function (error, result) {
       if (error) {
@@ -154,7 +161,8 @@ function loginWithSandstorm(connection) {
 
 if (__meteor_runtime_config__.SANDSTORM) {
   // Auto-login the main Meteor connection.
-  loginWithSandstorm(Meteor.connection);
+  loginWithSandstorm(Meteor.connection, __meteor_runtime_config__.SANDSTORM_API_HOST,
+    __meteor_runtime_config__.SANDSTORM_API_TOKEN);
 
   if (Package["accounts-base"]) {
     // Make Meteor.loggingIn() work by calling a private method of accounts-base. If this breaks then
@@ -171,7 +179,8 @@ if (__meteor_runtime_config__.SANDSTORM) {
   SandstormAccounts = {
     setTestUserInfo: function (info) {
       localStorage.sandstormTestUserInfo = JSON.stringify(info);
-      loginWithSandstorm(Meteor.connection);
+      loginWithSandstorm(Meteor.connection, __meteor_runtime_config__.SANDSTORM_API_HOST,
+         __meteor_runtime_config__.SANDSTORM_API_TOKEN);
     }
   };
 }
