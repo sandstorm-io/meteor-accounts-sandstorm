@@ -134,7 +134,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
       try {
         // Note that cross-origin POSTs cannot set arbitrary Content-Types without explicit CORS
         // permission, so this effectively prevents XSRF.
-        if (req.headers["content-type"] !== "application/x-sandstorm-login-token") {
+        if (req.headers["content-type"].split(";")[0].trim() !== "application/x-sandstorm-login-token") {
           throw new Error("wrong Content-Type for .sandstorm-login: " + req.headers["content-type"]);
         }
 
