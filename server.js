@@ -158,7 +158,8 @@ if (__meteor_runtime_config__.SANDSTORM) {
           permissions: permissions,
           picture: req.headers["x-sandstorm-user-picture"] || null,
           preferredHandle: req.headers["x-sandstorm-preferred-handle"] || null,
-          pronouns: req.headers["x-sandstorm-user-pronouns"] || null
+          pronouns: req.headers["x-sandstorm-user-pronouns"] || null,
+          sessionId: req.headers["x-sandstorm-session-id"] || null,
         };
 
         var userInfo = {sandstorm: sandstormInfo};
