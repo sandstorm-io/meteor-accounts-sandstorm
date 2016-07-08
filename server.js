@@ -58,12 +58,19 @@ if (__meteor_runtime_config__.SANDSTORM) {
 
   Meteor.onConnection(function (connection) {
     connection._sandstormUser = null;
+    connection._sandstormSessionId = null;
     connection.sandstormUser = function () {
       if (!connection._sandstormUser) {
         throw new Meteor.Error(400, "Client did not complete authentication handshake.");
       }
       return this._sandstormUser;
     };
+    connection.sandstormSessionId = function () {
+      if (!connection._sandstormSessionId) {
+        throw new Meteor.Error(400, "Client did not complete authentication handshake.");
+      }
+      return this._sandstormSessionId;
+    }
   });
 
   Meteor.methods({
@@ -96,6 +103,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
       // of restarting all subscriptions, which is important if the permissions changed. Hopefully
       // Meteor won't decide to "optimize" this by returning early if the user ID hasn't changed.
       this.connection._sandstormUser = info.sandstorm;
+      this.connection._sandstormSessionId = info.sessionId;
       this.setUserId(info.userId);
 
       return info;
