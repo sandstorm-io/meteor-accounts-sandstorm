@@ -158,7 +158,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
           permissions: permissions,
           picture: req.headers["x-sandstorm-user-picture"] || null,
           preferredHandle: req.headers["x-sandstorm-preferred-handle"] || null,
-          pronouns: req.headers["x-sandstorm-user-pronouns"] || null
+          pronouns: req.headers["x-sandstorm-user-pronouns"] || null,
         };
 
         var userInfo = {sandstorm: sandstormInfo};
@@ -178,6 +178,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
           userInfo.userId = sandstormInfo.id;
         }
 
+        userInfo.sessionId = req.headers["x-sandstorm-session-id"] || null;
         future.return(userInfo);
         res.writeHead(204, {});
         res.end();
