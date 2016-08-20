@@ -59,8 +59,9 @@ if (__meteor_runtime_config__.SANDSTORM) {
     // Because when this package is enabled no other login method is allowed
     // (see validateLoginAttempt callback above) this should not break anything.
     Package["accounts-base"].Accounts._loginUser = function (methodInvocation, userId, stampedLoginToken) {
-      // We misused stampedLoginToken argument to pass the "sandstorm" object to this method.
-      methodInvocation.connection._sandstormUser = stampedLoginToken;
+      // We misused stampedLoginToken argument to pass the sandstorm "info" object to this method.
+      methodInvocation.connection._sandstormUser = stampedLoginToken.sandstorm;
+      methodInvocation.connection._sandstormUser = stampedLoginToken.sessionId;
       methodInvocation.setUserId(userId);
 
       // We do not return anything because we do not have anything to add to the
@@ -71,12 +72,19 @@ if (__meteor_runtime_config__.SANDSTORM) {
 
   Meteor.onConnection(function (connection) {
     connection._sandstormUser = null;
+    connection._sandstormSessionId = null;
     connection.sandstormUser = function () {
       if (!connection._sandstormUser) {
         throw new Meteor.Error(400, "Client did not complete authentication handshake.");
       }
       return this._sandstormUser;
     };
+    connection.sandstormSessionId = function () {
+      if (!connection._sandstormSessionId) {
+        throw new Meteor.Error(400, "Client did not complete authentication handshake.");
+      }
+      return this._sandstormSessionId;
+    }
   });
 
   Meteor.methods({
@@ -103,8 +111,8 @@ if (__meteor_runtime_config__.SANDSTORM) {
         return Package["accounts-base"].Accounts._attemptLogin(this, "loginWithSandstorm", arguments, {
           userId: info.userId,
           type: "sandstorm",
-          // Misusing stampedLoginToken to pass "sandstorm" object to _loginUser method.
-          stampedLoginToken: info.sandstorm,
+          // Misusing stampedLoginToken to pass sandstorm "info" object to _loginUser method.
+          stampedLoginToken: info,
           // Options are returned if login is successful.
           options: info
         });
@@ -120,6 +128,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
         // of restarting all subscriptions, which is important if the permissions changed. Hopefully
         // Meteor won't decide to "optimize" this by returning early if the user ID hasn't changed.
         this.connection._sandstormUser = info.sandstorm;
+        this.connection._sandstormSessionId = info.sessionId;
         this.setUserId(info.userId);
 
         return info;
@@ -159,7 +168,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
       try {
         // Note that cross-origin POSTs cannot set arbitrary Content-Types without explicit CORS
         // permission, so this effectively prevents XSRF.
-        if (req.headers["content-type"] !== "application/x-sandstorm-login-token") {
+        if (req.headers["content-type"].split(";")[0].trim() !== "application/x-sandstorm-login-token") {
           throw new Error("wrong Content-Type for .sandstorm-login: " + req.headers["content-type"]);
         }
 
@@ -183,7 +192,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
           permissions: permissions,
           picture: req.headers["x-sandstorm-user-picture"] || null,
           preferredHandle: req.headers["x-sandstorm-preferred-handle"] || null,
-          pronouns: req.headers["x-sandstorm-user-pronouns"] || null
+          pronouns: req.headers["x-sandstorm-user-pronouns"] || null,
         };
 
         var userInfo = {sandstorm: sandstormInfo};
@@ -203,6 +212,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
           userInfo.userId = sandstormInfo.id;
         }
 
+        userInfo.sessionId = req.headers["x-sandstorm-session-id"] || null;
         future.return(userInfo);
         res.writeHead(204, {});
         res.end();
