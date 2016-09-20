@@ -28,7 +28,7 @@ function loginWithSandstorm(connection, apiHost, apiToken) {
   // point where login succeeds.
 
   // How this works:
-  // 1. We cerate a cryptographically random token, which we're going to send to the server twice.
+  // 1. We create a cryptographically random token, which we're going to send to the server twice.
   // 2. We make a method call to log in with this token. The server initially has no idea who
   //    is calling and will block waiting for info. (The method is marked "wait" on the client side
   //    so that further method calls are blocked until login completes.)
@@ -40,7 +40,7 @@ function loginWithSandstorm(connection, apiHost, apiToken) {
   // "resume token" logic. On a disconnect, we need to re-authenticate, because the user's
   // permissions may have changed (indeed, this may be the reason for the disconnect).
 
-  // If the connection doesn't alerady have a sandstormUser() method, add it now.
+  // If the connection doesn't already have a sandstormUser() method, add it now.
   if (!connection._sandstormUser) {
     connection._sandstormUser = new ReactiveVar(null);
     connection.sandstormUser = connection._sandstormUser.get.bind(connection._sandstormUser);
