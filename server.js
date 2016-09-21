@@ -162,7 +162,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
 
         var sandstormInfo = {
           id: req.headers["x-sandstorm-user-id"] || null,
-          name: decodeURI(req.headers["x-sandstorm-username"]),
+          name: decodeURIComponent(req.headers["x-sandstorm-username"]),
           permissions: permissions,
           picture: req.headers["x-sandstorm-user-picture"] || null,
           preferredHandle: req.headers["x-sandstorm-preferred-handle"] || null,
