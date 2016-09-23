@@ -172,7 +172,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
         var userInfo = {sandstorm: sandstormInfo};
         if (Package["accounts-base"]) {
           if (sandstormInfo.id) {
-            // The user is logged into Sansdtorm. Create a Meteor account for them, or find the
+            // The user is logged into Sandstorm. Create a Meteor account for them, or find the
             // existing one, and record the user ID.
             var login = Package["accounts-base"].Accounts.updateOrCreateUserFromExternalService(
               "sandstorm", sandstormInfo, {profile: {name: sandstormInfo.name}});
