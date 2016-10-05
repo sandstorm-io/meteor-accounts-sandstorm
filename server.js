@@ -25,7 +25,7 @@ if (process.env.SANDSTORM) {
 
 if (__meteor_runtime_config__.SANDSTORM) {
   if (Package["accounts-base"]) {
-    // Highlander Mode: Disable all non-Sandstorm login mechanisms.
+    // Highlander Mode: Disable all non-Sandstorm login mechanisms, including resume tokens.
     Package["accounts-base"].Accounts.validateLoginAttempt(function (attempt) {
       if (!attempt.allowed) {
         return false;
@@ -105,6 +105,14 @@ if (__meteor_runtime_config__.SANDSTORM) {
       this.connection._sandstormUser = info.sandstorm;
       this.connection._sandstormSessionId = info.sessionId;
       this.setUserId(info.userId);
+
+      if (Package["accounts-base"]) {
+        // CollectionFS (a common dependency in Meteor apps) relies on resume tokens to
+        // associate requests with users, so we generate a resume token here even though
+        // Highlander Mode disables using it to actually log in.
+        info.resumeToken = Accounts._generateStampedLoginToken();
+        Package["accounts-base"].Accounts._insertLoginToken(info.userId, info.resumeToken);
+      }
 
       return info;
     }
