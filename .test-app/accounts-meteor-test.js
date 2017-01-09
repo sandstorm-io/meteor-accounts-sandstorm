@@ -35,7 +35,8 @@ if (Meteor.isServer) {
   Meteor.publish("info", function () {
     var user = Meteor.users && this.userId && Meteor.users.findOne(this.userId);
     this.added("info", "info", {userId: this.userId, user: user, sandstormUser: this.connection.sandstormUser(),
-                                sessionId: this.connection.sandstormSessionId()});
+                                sessionId: this.connection.sandstormSessionId(),
+                                tabId: this.connection.sandstormTabId()});
     this.ready();
   });
   
