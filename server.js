@@ -76,7 +76,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
       if (!connection._sandstormTabId) {
         throw new Meteor.Error(400, "Client did not complete authentication handshake.");
       }
-      return new Buffer(this._sandstormTabId, 'hex');
+      return this._sandstormTabId;
     }
   });
 
