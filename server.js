@@ -59,6 +59,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
   Meteor.onConnection(function (connection) {
     connection._sandstormUser = null;
     connection._sandstormSessionId = null;
+    connection._sandstormTabId = null;
     connection.sandstormUser = function () {
       if (!connection._sandstormUser) {
         throw new Meteor.Error(400, "Client did not complete authentication handshake.");
@@ -70,6 +71,12 @@ if (__meteor_runtime_config__.SANDSTORM) {
         throw new Meteor.Error(400, "Client did not complete authentication handshake.");
       }
       return this._sandstormSessionId;
+    }
+    connection.sandstormTabId = function () {
+      if (!connection._sandstormTabId) {
+        throw new Meteor.Error(400, "Client did not complete authentication handshake.");
+      }
+      return new Buffer(this._sandstormTabId, 'hex');
     }
   });
 
@@ -104,6 +111,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
       // Meteor won't decide to "optimize" this by returning early if the user ID hasn't changed.
       this.connection._sandstormUser = info.sandstorm;
       this.connection._sandstormSessionId = info.sessionId;
+      this.connection._sandstormTabId = info.tabId;
       this.setUserId(info.userId);
 
       return info;
@@ -187,6 +195,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
         }
 
         userInfo.sessionId = req.headers["x-sandstorm-session-id"] || null;
+        userInfo.tabId = req.headers["x-sandstorm-tab-id"] || null;
         future.return(userInfo);
         res.writeHead(204, {});
         res.end();
