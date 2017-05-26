@@ -62,6 +62,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
       // We misused stampedLoginToken argument to pass the sandstorm "info" object to this method.
       methodInvocation.connection._sandstormUser = stampedLoginToken.sandstorm;
       methodInvocation.connection._sandstormUser = stampedLoginToken.sessionId;
+      methodInvocation.connection._sandstormTabId = info.tabId;
       methodInvocation.setUserId(userId);
 
       // We do not return anything because we do not have anything to add to the
@@ -73,6 +74,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
   Meteor.onConnection(function (connection) {
     connection._sandstormUser = null;
     connection._sandstormSessionId = null;
+    connection._sandstormTabId = null;
     connection.sandstormUser = function () {
       if (!connection._sandstormUser) {
         throw new Meteor.Error(400, "Client did not complete authentication handshake.");
@@ -84,6 +86,12 @@ if (__meteor_runtime_config__.SANDSTORM) {
         throw new Meteor.Error(400, "Client did not complete authentication handshake.");
       }
       return this._sandstormSessionId;
+    }
+    connection.sandstormTabId = function () {
+      if (!connection._sandstormTabId) {
+        throw new Meteor.Error(400, "Client did not complete authentication handshake.");
+      }
+      return this._sandstormTabId;
     }
   });
 
@@ -129,6 +137,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
         // Meteor won't decide to "optimize" this by returning early if the user ID hasn't changed.
         this.connection._sandstormUser = info.sandstorm;
         this.connection._sandstormSessionId = info.sessionId;
+        this.connection._sandstormTabId = info.tabId;
         this.setUserId(info.userId);
 
         return info;
@@ -188,7 +197,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
 
         var sandstormInfo = {
           id: req.headers["x-sandstorm-user-id"] || null,
-          name: decodeURI(req.headers["x-sandstorm-username"]),
+          name: decodeURIComponent(req.headers["x-sandstorm-username"]),
           permissions: permissions,
           picture: req.headers["x-sandstorm-user-picture"] || null,
           preferredHandle: req.headers["x-sandstorm-preferred-handle"] || null,
@@ -198,7 +207,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
         var userInfo = {sandstorm: sandstormInfo};
         if (Package["accounts-base"]) {
           if (sandstormInfo.id) {
-            // The user is logged into Sansdtorm. Create a Meteor account for them, or find the
+            // The user is logged into Sandstorm. Create a Meteor account for them, or find the
             // existing one, and record the user ID.
             var login = Package["accounts-base"].Accounts.updateOrCreateUserFromExternalService(
               "sandstorm", sandstormInfo, {profile: {name: sandstormInfo.name}});
@@ -213,6 +222,7 @@ if (__meteor_runtime_config__.SANDSTORM) {
         }
 
         userInfo.sessionId = req.headers["x-sandstorm-session-id"] || null;
+        userInfo.tabId = req.headers["x-sandstorm-tab-id"] || null;
         future.return(userInfo);
         res.writeHead(204, {});
         res.end();
