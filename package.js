@@ -36,7 +36,7 @@ Package.onUse(function(api) {
   api.use('tracker', 'client');
   api.use('reactive-var', 'client');
   api.use('check', 'server');
-  api.use('ddp-server', 'server');
+  api.use('ddp-server@2.0.0', 'server');
 
   api.addFiles("client.js", "client");
   api.addFiles("server.js", "server");
