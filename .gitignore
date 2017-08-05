@@ -1,3 +1,4 @@
 .build*
-test-app/.meteor/local
-test-app/.meteor-spk
+.test-app/.meteor/local
+.test-app/.meteor-spk
+.test-app/node_modules

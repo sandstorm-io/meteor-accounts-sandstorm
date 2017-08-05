@@ -21,13 +21,13 @@
 
 Package.describe({
   summary: "Login service for Sandstorm.io applications",
-  version: "0.6.0",
+  version: "0.6.1",
   name: "kenton:accounts-sandstorm",
   git: "https://github.com/sandstorm-io/meteor-accounts-sandstorm.git"
 });
 
 Package.onUse(function(api) {
-  api.versionsFrom('1.2');
+  api.versionsFrom('1.5');
 
   api.use('random', ['client', 'server']);
   api.use('accounts-base', ['client', 'server'], {weak: true});
@@ -36,7 +36,7 @@ Package.onUse(function(api) {
   api.use('tracker', 'client');
   api.use('reactive-var', 'client');
   api.use('check', 'server');
-  api.use('ddp-server', 'server');
+  api.use('ddp-server@2.0.0', 'server');
 
   api.addFiles("client.js", "client");
   api.addFiles("server.js", "server");
