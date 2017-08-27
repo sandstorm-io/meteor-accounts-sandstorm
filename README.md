@@ -79,6 +79,10 @@ In particular:
   returned by `Meteor.sandstormUser()`.
 * `Meteor.loggingIn()` will return `true` during the initial handshake (when
   `sandstormUser()` would return `null`).
+* For compatibility with libraries such as CollectionFS, "resume tokens" will be
+  generated and propagated to `localStorage["Meteor.loginToken"]`, matching the usual
+  Meteor login behavior. Note that Highlander mode intentionally prevents these tokens
+  from being usable for actually logging in.
 
 Please note, however, that you should prefer `sandstormUser()` over
 `Meteor.user().services.sandstorm` whenever possible, **especially** for enforcing

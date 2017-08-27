@@ -75,6 +75,12 @@ function loginWithSandstorm(connection, apiHost, apiToken) {
       console.error("loginWithSandstorm failed:", error);
     } else {
       connection._sandstormUser.set(result.sandstorm);
+      if (Package["accounts-base"]) {
+        var resumeToken = result.resumeToken;
+        Package["accounts-base"].Accounts._storeLoginToken(
+          result.userId, resumeToken.token, resumeToken.when);
+      }
+
       connection.setUserId(result.userId);
     }
   };
