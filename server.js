@@ -67,13 +67,13 @@ if (__meteor_runtime_config__.SANDSTORM) {
       return this._sandstormUser;
     };
     connection.sandstormSessionId = function () {
-      if (!connection._sandstormSessionId) {
+      if (!connection._sandstormUser) {
         throw new Meteor.Error(400, "Client did not complete authentication handshake.");
       }
       return this._sandstormSessionId;
     }
     connection.sandstormTabId = function () {
-      if (!connection._sandstormTabId) {
+      if (!connection._sandstormUser) {
         throw new Meteor.Error(400, "Client did not complete authentication handshake.");
       }
       return this._sandstormTabId;
