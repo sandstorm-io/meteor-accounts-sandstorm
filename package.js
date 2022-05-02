@@ -30,7 +30,7 @@ Package.onUse(function(api) {
   api.versionsFrom('1.5.1');
 
   api.use('random', ['client', 'server']);
-  api.use('accounts-base', ['client', 'server'], {weak: true});
+  api.use('accounts-base@2.2.2', ['client', 'server'], {weak: true});
   api.use('webapp', 'server');
   api.use('http', 'client');
   api.use('tracker', 'client');
