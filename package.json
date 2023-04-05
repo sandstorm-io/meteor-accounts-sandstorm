@@ -1,0 +1,21 @@
+{
+  "name": "@wekanteam/accounts-sandstorm",
+  "version": "0.6.4",
+  "description": "Forked Package meteor-accounts-sandstorm",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wekan/meteor-accounts-sandstorm.git"
+  },
+  "keywords": [
+    "meteor",
+    "accounts",
+    "sandstorm"
+  ],
+  "author": "xet7 <https://github.com/xet7>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wekan/meteor-accounts-sandstorm/issues"
+  },
+  "homepage": "https://github.com/wekan/meteor-accounts-sandstorm"
+}
