@@ -1,3 +1,8 @@
+# Current status
+
+- Originally from https://github.com/sandstorm-io/meteor-accounts-sandstorm
+- xet7 added upgrade to newest Meteor 2.11 https://github.com/sandstorm-io/meteor-accounts-sandstorm/pull/36
+
 # Sandstorm.io login integration for Meteor.js
 
 [Sandstorm](https://sandstorm.io) is a platform for personal clouds that makes
@@ -19,7 +24,7 @@ populated from Sandstorm. When using this package, you should not use
 To use this package in your Meteor project, simply install it from the Meteor
 package repository:
 
-    meteor add kenton:accounts-sandstorm
+    npm install @wekanteam/accounts-sandstorm
 
 To package a Meteor app for Sandstorm, see
 [the Meteor app packaging guide](https://docs.sandstorm.io/en/latest/vagrant-spk/packaging-tutorial-meteor/).
@@ -131,7 +136,7 @@ For almost all users, 0.2 should be a drop-in replacement for 0.1, only adding
 new features. Please note, though, two possible issues:
 
 * If you did not explicitly depend on `accounts-base` before, you must add this
-  dependency, since it is no longer implied by `accounts-sansdtorm`.
+  dependency, since it is no longer implied by `accounts-sandstorm`.
 * The `/.sandstorm-credentials` endpoint no longer exists. If you were directly
   fetching this undocumented endpoint before, you will need to switch your code
   to use `Meteor.sandstormUser()`.
