@@ -1,6 +1,6 @@
 {
   "name": "@wekanteam/accounts-sandstorm",
-  "version": "0.6.4",
+  "version": "0.8.0",
   "description": "Forked Package meteor-accounts-sandstorm",
   "main": "dist/index.js",
   "repository": {
